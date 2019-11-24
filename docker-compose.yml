@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  web:
+    container_name: "${PROJECT_NAME}_nginx"
+    image: jarischaefer/docker-librenms
+    hostname: web-librenms
+    ports:
+      - ${HTTP_IP_PORT}:80
+    volumes:
+      - ${DATA_FOLDER_PATH}/logs:/opt/librenms/logs
+      - ${DATA_FOLDER_PATH}rrd:/opt/librenms/rrd
+    environment:
+      - APP_KEY=base64:Excgc1Km7qbm14uspRAtBIJkftJA372LMib7r8uxK2M=
+      - DB_HOST=db
+      - DB_NAME=librenms
+      - DB_USER=librenms
+      - DB_PASS=${MYSQL_PASSWORD}
+      - POLLERS=${POLLERS}
+      - BASE_URL=${BASE_URL}
+      - TZ=${TZ}
+    links:
+      - mysql:db
+  mysql:
+    container_name: "${PROJECT_NAME}_mysql"
+    hostname: mysql-librenms
+    image: mysql:5.6
+    command: --sql-mode=""
+    ports:
+      - "3306"
+    volumes:
+      - ${DATA_FOLDER_PATH}mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=librenms
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=librenms
+
+
