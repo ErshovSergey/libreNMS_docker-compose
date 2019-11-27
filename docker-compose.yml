@@ -2,6 +2,7 @@ version: '2'
 
 services:
   web:
+    restart: always
     container_name: "${PROJECT_NAME}_nginx"
     image: jarischaefer/docker-librenms
     hostname: web-librenms
@@ -22,6 +23,7 @@ services:
     links:
       - mysql:db
   mysql:
+    restart: always
     container_name: "${PROJECT_NAME}_mysql"
     hostname: mysql-librenms
     image: mysql:5.6
